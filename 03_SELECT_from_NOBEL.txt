@@ -1,0 +1,403 @@
+table: NOBEL
+
+yr    subject      winner
+-------------------------------
+1960  Chemistry    Willard F. Libby
+1960  Literature   Saint-John Perse
+1960  Medicine     Sir Frank Macfarlane Burnet
+1960  Medicine     Peter Madawar
+...
+
+1. Winners from 1950
+
+> Change the query shown so that it displays Nobel prizes for 1950.
+
+SQL:
+
+SELECT yr, subject, winner
+  FROM nobel
+ WHERE yr = 1950
+
+Answer:
+
+yr    subject      winner
+-------------------------------
+1950  chemistry    Kurt Alder
+1950  chemistry    Otto Diels
+1950  literature   Bertrand Russell
+1950  medicine     Edward Kendall
+1950  medicine     Philip Hench
+1950  medicine     Tadeus Reichstein
+1950  peace        Ralph Bunche
+1950  physics      Cecil Powell
+
+2. 1962 Literature
+
+> Show who won the 1962 prize for literature.
+
+SQL:
+
+SELECT winner
+  FROM nobel
+ WHERE yr = 1962
+   AND subject = 'Literature'
+
+Answer:
+
+winner
+----------------
+John Steinbeck
+
+3. Albert Einstein
+
+> Show the year and subject that won 'Albert Einstein' his prize.
+
+SQL:
+
+SELECT yr, subject
+  FROM nobel
+ WHERE winner = 'Albert Einstein'
+
+Answer:
+
+yr    subject
+----------------
+1921  physics
+
+4. Recent Peace Prizes
+
+> Give the name of the 'Peace' winners since the year 2000, including 2000.
+
+SQL:
+
+SELECT winner
+FROM nobel
+WHERE subject = 'Peace'
+  AND yr >= 2000;
+
+Answer:
+
+winner
+-----------------------------------------------
+Kim Dae-jung
+Kofi Annan
+United Nations
+Jimmy Carter
+Shirin Ebadi
+Wangari Maathai
+International Atomic Energy Agency
+Mohamed ElBaradei
+Grameen Bank
+Muhammad Yunus
+Al Gore
+Intergovernmental Panel on Climate Change
+Martti Ahtisaari
+Barack Obama
+Liu Xiaobo
+Ellen Johnson Sirleaf
+Leymah Gbowee
+Tawakkol Karman
+European Union
+Organisation for the Prohibition of Chemical Weapons
+Kailash Satyarthi
+Malala Yousafzai
+National Dialogue Quartet
+Juan Manuel Santos
+International Campaign to Abolish Nuclear Weapons
+Denis Mukwege
+Nadia Murad
+Abiy Ahmed Ali
+World Food Programme
+Dmitry Muratov
+Maria Ressa
+Ales Bialiatski
+Center for Civil Liberties
+Memorial
+Narges Mohammadi
+
+5. Literature in the 1980's
+
+> Show all details (yr, subject, winner) of the literature prize winners for 1980 to 1989 inclusive.
+
+SQL:
+
+SELECT yr, subject, winner
+FROM nobel
+WHERE subject = 'Literature'
+  AND (yr >= 1980 AND yr <= 1989);
+
+Answer:
+
+yr    subject      winner
+--------------------------------------------
+1980  literature   Czesław Miłosz
+1981  literature   Elias Canetti
+1982  literature   Gabriel García Márquez
+1983  literature   William Golding
+1984  literature   Jaroslav Seifert
+1985  literature   Claude Simon
+1986  literature   Wole Soyinka
+1987  literature   Joseph Brodsky
+1988  literature   Naguib Mahfouz
+1989  literature   Camilo José Cela
+
+6. Only Presidents
+
+> Show all details of the presidential winners:
+
+- Theodore Roosevelt
+- Thomas Woodrow Wilson
+- Jimmy Carter
+- Barack Obama
+
+SQL:
+
+SELECT * FROM nobel
+WHERE winner IN (
+  'Theodore Roosevelt',
+  'Thomas Woodrow Wilson',
+  'Jimmy Carter',
+  'Barack Obama'
+);
+
+Answer:
+
+yr    subject  winner
+--------------------------------
+1906  peace    Theodore Roosevelt
+2002  peace    Jimmy Carter
+2009  peace    Barack Obama
+
+7. John
+
+> Show the winners with first name John
+
+SQL:
+
+SELECT winner
+FROM nobel
+WHERE winner LIKE 'John%';
+
+Answer:
+
+winner
+------------------------
+John Macleod
+John Galsworthy
+John Northrop
+John Mott
+John Cockcroft
+John Enders
+John Bardeen
+John Kendrew
+John Steinbeck
+John Bardeen
+John Cornforth
+John Van Vleck
+John Vane
+John Polanyi
+John Walker
+John Pople
+John Hume
+John Fenn
+John Sulston
+John Hall
+John Mather
+John O'Keefe
+John Goodenough
+John Clauser
+
+8. Chemistry and Physics from different years
+
+> Show the year, subject, and name of physics winners for 1980 together with the chemistry winners for 1984.
+
+SQL:
+
+SELECT yr, subject, winner
+FROM nobel
+WHERE (subject = 'Physics' AND yr = 1980)
+   OR (subject = 'Chemistry' AND yr = 1984);
+
+Answer:
+
+yr    subject      winner
+--------------------------------------
+1980  physics      James Cronin
+1980  physics      Val Fitch
+1984  chemistry    Bruce Merrifield
+
+9. Exclude Chemists and Medics
+
+> Show the year, subject, and name of winners for 1980 excluding chemistry and medicine
+
+SQL:
+
+SELECT yr, subject, winner
+FROM nobel
+WHERE yr = 1980
+  AND subject NOT IN ('Chemistry', 'Medicine');
+
+Answer:
+
+yr    subject      winner
+----------------------------------------
+1980  literature   Czesław Miłosz
+1980  peace        Adolfo Pérez Esquivel
+1980  physics      James Cronin
+1980  physics      Val Fitch
+
+10. Early Medicine, Late Literature
+
+> Show year, subject, and name of people who won a 'Medicine' prize in an early year (before 1910,
+not including 1910) together with winners of a 'Literature' prize in a later year (after 2004,
+including 2004) 
+
+SQL:
+
+SELECT yr, subject, winner
+FROM nobel
+WHERE (yr < 1910 AND subject = 'Medicine')
+   OR (yr >= 2004 AND subject = 'Literature');
+
+Answer:
+
+yr    subject      winner
+--------------------------------------------------
+1901  medicine     Emil von Behring
+1902  medicine     Ronald Ross
+1903  medicine     Niels Ryberg Finsen
+1904  medicine     Ivan Pavlov
+1905  medicine     Robert Koch
+1906  medicine     Camillo Golgi
+1906  medicine     Santiago Ramón y Cajal
+1907  medicine     Alphonse Laveran
+1908  medicine     Ilya Mechnikov
+1908  medicine     Paul Ehrlich
+1909  medicine     Theodor Kocher
+2004  literature   Elfriede Jelinek
+2005  literature   Harold Pinter
+2006  literature   Orhan Pamuk
+2007  literature   Doris Lessing
+2008  literature   Jean-Marie Gustave Le Clézio
+2009  literature   Herta Müller
+2010  literature   Mario Vargas Llosa
+2011  literature   Tomas Tranströmer
+2012  literature   Mo Yan
+2013  literature   Alice Munro
+2014  literature   Patrick Modiano
+2015  literature   Svetlana Alexievich
+2016  literature   Bob Dylan
+2017  literature   Kazuo Ishiguro
+2018  literature   Olga Tokarczuk
+2019  literature   Peter Handke
+2020  literature   Louise Glück
+2021  literature   Abdulrazak Gurnah
+2022  literature   Annie Ernaux
+2023  literature   Jon Fosse
+
+
+Harder Questions
+
+11. Umlaut
+
+> Find all details of the prize won by PETER GRÜNBERG
+
+Non-ASCII characters. The u in his name has an umlaut. You may find this link useful https://en.wikipedia.org/wiki/%C3%9C#Keyboarding
+
+SQL:
+
+SELECT * FROM nobel
+WHERE winner = 'Peter Grünberg';
+
+Answer:
+
+yr    subject   winner
+--------------------------------
+2007  physics   Peter Grünberg
+
+12. Apostrophe
+
+> Find all details of the prize won by EUGENE O'NEILL
+
+Escaping single quotes. You can't put a single quote in a quote string directly.
+You can use two single quotes within a quoted string.
+
+SQL:
+
+SELECT * FROM nobel
+WHERE winner = "EUGENE O'NEILL";
+
+Answer:
+
+yr    subject      winner
+-------------------------------------
+1936  literature   Eugene O'Neill
+
+13. Knights of the realm
+
+> Knights in order. List the winners, year and subject where the winner starts with Sir.
+Show the the most recent first, then by name order.
+
+SQL:
+
+SELECT winner, yr, subject
+FROM nobel
+WHERE winner LIKE 'Sir%'
+ORDER BY yr DESC, winner ASC;
+
+Answer:
+
+winner                         yr    subject
+-------------------------------------------------
+Sir Peter Ratcliffe            2019  medicine
+Sir Gregory Winter             2018  chemistry
+Sir Fraser Stoddart            2016  chemistry
+Sir John Gurdon                2012  medicine
+Sir Martin Evans               2007  medicine
+Sir Peter Mansfield            2003  medicine
+Sir Paul Nurse                 2001  medicine
+Sir Harold Kroto               1996  chemistry
+Sir James Black                1988  medicine
+Sir Nevill Mott                1977  physics
+Sir Bernard Katz               1970  medicine
+Sir John Eccles                1963  medicine
+Sir Frank Macfarlane Burnet    1960  medicine
+Sir Cyril Hinshelwood          1956  chemistry
+Sir Robert Robinson            1947  chemistry
+Sir Alexander Fleming          1945  medicine
+Sir Howard Florey              1945  medicine
+Sir Henry Dale                 1936  medicine
+Sir Norman Angell              1933  peace
+Sir Charles Sherrington        1932  medicine
+Sir Chandrasekhara Venkata Raman 1930 physics
+Sir Frederick Hopkins          1929  medicine
+Sir Austen Chamberlain         1925  peace
+Sir William Ramsay             1904  chemistry
+
+14. Chemistry and Physics last
+
+The expression subject IN ('chemistry','physics') can be used as a value - it will be 0 or 1.
+
+> Show the 1984 winners and subject ordered by subject and winner name; but list chemistry and physics last.
+
+SQL:
+
+SELECT winner, subject
+FROM nobel
+WHERE yr = 1984
+ORDER BY subject IN ('Physics', 'Chemistry'),
+         subject,
+         winner;
+
+Answer:
+
+winner                  subject
+-------------------------------------
+Jaroslav Seifert        literature
+César Milstein          medicine
+Georges F. Köhler       medicine
+Niels Jerne             medicine
+Desmond Tutu            peace
+Bruce Merrifield        chemistry
+Carlo Rubbia            physics
+Simon van der Meer      physics
