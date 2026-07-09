@@ -37,7 +37,6 @@ Bahamas                      Caribbean          351461
 Bahrain                      Asia               1234571
 Bangladesh                   Asia               156557000
 Barbados                     Caribbean          285000
-Belarus                      Europe             9467000
 Belgium                      Europe             11198638
 Belize                       North America      349728
 Benin                        Africa             9988068
@@ -320,7 +319,6 @@ India             2000
 Italy             33000
 Japan             47000
 Mexico            10000
-Russia            14000
 South Korea       22000
 Spain             28000
 United Kingdom    39000
@@ -424,7 +422,7 @@ count because they have more than one word in the name.
 > Find the country that has all the vowels and no spaces in its name.
 
 - You can use the phrase name NOT LIKE '%a%' to exclude characters from your results.
-- The query shown misses countries like Bahamas and Belarus because they contain at least one 'a'
+- The query shown misses countries like Bahamas because they contain at least one 'a'
 
 SQL:
 
