@@ -1,0 +1,391 @@
+table
+
+name         continent  area     population  gdp
+------------------------------------------------------------
+Afghanistan  Asia       652230   25500100    20343000000
+Albania      Europe     28748    2831741     12960000000
+Algeria      Africa     2381741  37100000    188681000000
+Andorra      Europe     468      78115       3712000000
+Angola       Africa     1246700  20609294    100990000000
+...
+
+1. Bigger than Ukraine
+
+> List each country name where the population is larger than that of 'Ukraine'. 
+
+world(name, continent, area, population, gdp)
+
+SQL:
+
+SELECT name FROM world
+WHERE population >
+ (SELECT population FROM world
+  WHERE name='Ukraine')
+
+Answer:
+
+name
+----------------------------------------
+Bangladesh
+Brazil
+China
+Colombia
+Congo, Democratic Republic of
+Egypt
+Ethiopia
+France
+Germany
+India
+Indonesia
+Iran
+Italy
+Japan
+Kenya
+Mexico
+Myanmar
+Nigeria
+Pakistan
+Philippines
+South Africa
+South Korea
+Spain
+Tanzania
+Thailand
+Turkey
+United Kingdom
+United States
+Vietnam
+
+2. Richer than UK
+
+> Show the countries in Europe with a per capita GDP greater than 'United Kingdom'.
+
+Per Capita GDP. The per capita GDP is the gdp/population
+
+SQL:
+
+SELECT name FROM world
+WHERE continent = 'Europe'
+  AND gdp / population >
+      (SELECT gdp / population
+       FROM world
+       WHERE name = 'United Kingdom');
+
+Answer:
+
+name
+--------------------------------
+Andorra
+Austria
+Belgium
+Denmark
+Finland
+France
+Germany
+Iceland
+Ireland
+Liechtenstein
+Luxembourg
+Monaco
+Netherlands
+Norway
+San Marino
+Sweden
+Switzerland
+
+3. Neighbours of Argentina and Australia
+
+> List the name and continent of countries in the continents containing either Argentina or Australia. Order by name of the country.
+
+SQL:
+
+SELECT name, continent
+FROM world
+WHERE continent IN (
+  SELECT continent
+  FROM world
+  WHERE name IN ('Argentina', 'Australia')
+)
+ORDER BY name;
+
+Answer:
+
+name                                 continent
+------------------------------------------------------------
+Argentina                            South America
+Australia                            Oceania
+Bolivia                              South America
+Brazil                               South America
+Chile                                South America
+Colombia                             South America
+Ecuador                              South America
+Fiji                                 Oceania
+Guyana                               South America
+Kiribati                             Oceania
+Marshall Islands                     Oceania
+Micronesia, Federated States of      Oceania
+Nauru                                Oceania
+New Zealand                          Oceania
+Palau                                Oceania
+Papua New Guinea                     Oceania
+Paraguay                             South America
+Peru                                 South America
+Saint Vincent and the Grenadines     South America
+Samoa                                Oceania
+Solomon Islands                      Oceania
+Suriname                             South America
+Tonga                                Oceania
+Tuvalu                               Oceania
+Uruguay                              South America
+Vanuatu                              Oceania
+Venezuela                            South America
+
+4. Between Canada and Poland
+
+> Which country has a population that is more than United Kingdom but less than Germany? Show the name and the population.
+
+SQL:
+
+SELECT name, population
+FROM world
+WHERE population > (
+ SELECT population
+ FROM world
+ WHERE name = 'United Kingdom'
+)
+AND population < (
+ SELECT population
+ FROM world
+ WHERE name = 'Germany'
+);
+
+Answer:
+
+name                                 population
+------------------------------------------------
+Congo, Democratic Republic of        69360000
+France                               65906000
+Iran                                 77552000
+Thailand                             64456700
+Turkey                               76667864
+
+5. Percentages of Germany
+
+Germany (population roughly 80 million) has the largest population of the countries in Europe. Austria (population 8.5 million)
+has 11% of the population of Germany.
+
+> Show the name and the population of each country in Europe. Show the population as a percentage of the population of Germany.
+
+Decimal places. You can use the function ROUND to remove the decimal places.
+Percent symbol %. You can use the function CONCAT to add the percentage symbol.
+
+SQL:
+
+SELECT
+  name,
+  CONCAT(
+    ROUND(
+      population * 100.0 / (
+        SELECT population
+        FROM world
+        WHERE name = 'Germany'
+      )
+    ),
+    '%'
+  ) AS percentage
+FROM world
+WHERE continent = 'Europe';
+
+Answer:
+
+name                 percentage
+----------------------------------------
+Albania              3%
+Andorra              0%
+Austria              11%
+Belgium              14%
+Bosnia and Herzegovina 5%
+Bulgaria             9%
+Croatia              5%
+Czech Republic       13%
+Denmark              7%
+Estonia              2%
+Finland              7%
+France               82%
+Germany              100%
+Greece               14%
+Hungary              12%
+Iceland              0%
+Ireland              6%
+Italy                75%
+Kazakhstan           21%
+Latvia               2%
+Liechtenstein        0%
+Lithuania            4%
+Luxembourg           1%
+Macedonia            3%
+Malta                1%
+Moldova              4%
+Monaco               0%
+Montenegro           1%
+Netherlands          21%
+Norway               6%
+Poland               48%
+Portugal             13%
+Romania              25%
+San Marino           0%
+Serbia               9%
+Slovakia             7%
+Slovenia             3%
+Spain                58%
+Sweden               12%
+Switzerland          10%
+Ukraine              53%
+United Kingdom       79%
+Vatican City         0%
+
+6. Bigger than every country in Europe
+
+> Which countries have a GDP greater than every country in Europe? [Give the name only.] (Some countries may have NULL gdp values) 
+
+SQL:
+
+SELECT name
+FROM world
+WHERE gdp > ALL (
+  SELECT gdp
+  FROM world
+  WHERE continent = 'Europe'
+    AND gdp IS NOT NULL
+);
+
+Answer:
+
+name
+----------------
+China
+Japan
+United States
+
+7. Largest in each continent
+
+> Find the largest country (by area) in each continent, show the continent, the name and the area.
+
+SQL:
+
+SELECT continent, name, area
+FROM world x
+WHERE area >= ALL (
+  SELECT area
+  FROM world y
+  WHERE y.continent = x.continent
+    AND area > 0
+);
+
+Answer:
+
+continent       name         area
+----------------------------------------
+Africa          Algeria      2381741
+Oceania         Australia    7692024
+South America   Brazil       8515767
+North America   Canada       9984670
+Asia            China        9596961
+Caribbean       Cuba         109884
+Europe          Kazakhstan   2724900
+
+8. First country of each continent (alphabetically)
+
+> List each continent and the name of the country that comes first alphabetically.
+
+SQL:
+
+SELECT continent, name
+FROM world x
+WHERE name = (
+  SELECT MIN(name)
+  FROM world y
+  WHERE y.continent = x.continent
+);
+
+Answer:
+
+continent        name
+--------------------------------------
+Africa           Algeria
+Asia             Afghanistan
+Caribbean        Antigua and Barbuda
+Eurasia          Armenia
+Europe           Albania
+North America    Belize
+Oceania          Australia
+South America    Argentina
+
+9. Difficult Questions That Utilize Techniques Not Covered In Prior Sections
+
+> Find the continents where all countries have a population <= 25000000. Then find the
+names of the countries associated with these continents. Show name, continent and population. 
+
+SQL:
+
+SELECT name, continent, population
+FROM world
+WHERE continent IN (
+  SELECT continent
+  FROM world
+  GROUP BY continent
+  HAVING MAX(population) <= 25000000
+);
+
+Answer:
+
+name                                 continent      population
+--------------------------------------------------------------
+Antigua and Barbuda                  Caribbean     86295
+Australia                            Oceania       23545500
+Bahamas                              Caribbean     351461
+Barbados                             Caribbean     285000
+Cuba                                 Caribbean     11167325
+Dominica                             Caribbean     71293
+Dominican Republic                   Caribbean     9445281
+Fiji                                 Oceania       858038
+Grenada                              Caribbean     103328
+Haiti                                Caribbean     10413211
+Jamaica                              Caribbean     2717991
+Kiribati                             Oceania       106461
+Marshall Islands                     Oceania       56086
+Micronesia, Federated States of      Oceania       101351
+Nauru                                Oceania       9945
+New Zealand                          Oceania       4538520
+Palau                                Oceania       20901
+Papua New Guinea                     Oceania       7398500
+Saint Lucia                          Caribbean     180000
+Samoa                                Oceania       187820
+Solomon Islands                      Oceania       581344
+Tonga                                Oceania       103036
+Trinidad and Tobago                  Caribbean     1328019
+Tuvalu                               Oceania       11323
+Vanuatu                              Oceania       264652
+
+10. Three time bigger
+
+> Some countries have populations more than three times that of all of their
+neighbours (in the same continent). Give the countries and continents.
+
+SQL:
+
+SELECT name, continent
+FROM world x
+WHERE population > ALL (
+  SELECT population * 3
+  FROM world y
+  WHERE y.continent = x.continent
+    AND y.name <> x.name
+);
+
+Answer:
+
+name        continent
+-----------------------------
+Australia   Oceania
+Brazil      South America
