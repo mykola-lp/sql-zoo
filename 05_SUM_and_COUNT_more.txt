@@ -1,0 +1,218 @@
+1. Show the total number of prizes awarded.
+
+SQL:
+
+SELECT COUNT(winner) FROM nobel
+
+Answer:
+
+COUNT(winner)
+-------------
+907
+
+2. List each subject - just once 
+
+SQL:
+
+SELECT DISTINCT subject FROM nobel
+
+Answer:
+
+subject
+-----------
+chemistry
+literature
+medicine
+peace
+physics
+
+3. Show the total number of prizes awarded for Physics.
+
+SQL:
+
+SELECT COUNT(winner)
+FROM nobel
+WHERE subject='physics';
+
+Answer:
+
+COUNT(winner)
+-------------
+225
+
+4. For each subject show the subject and the number of prizes.
+
+SQL:
+
+SELECT subject, COUNT(winner)
+FROM nobel
+GROUP BY subject;
+
+Answer:
+
+subject      COUNT(winner)
+---------------------------
+chemistry    194
+literature   120
+medicine     227
+peace        141
+physics      225
+
+5. For each subject show the first year that the prize was awarded.
+
+SQL:
+
+SELECT subject, MIN(yr)
+FROM nobel
+GROUP BY subject;
+
+Answer:
+
+subject      MIN(yr)
+---------------------
+chemistry    1901
+literature   1901
+medicine     1901
+peace        1901
+physics      1901
+
+6. For each subject show the number of prizes awarded in the year 2000.
+
+SQL:
+
+SELECT subject, COUNT(*)
+FROM nobel
+WHERE yr = 2000
+GROUP BY subject;
+
+Answer:
+
+subject      COUNT(*)
+---------------------
+chemistry    3
+literature   1
+medicine     3
+peace        1
+physics      3
+
+7. Show the number of different winners for each subject. Be awarethat Frederick Sanger
+has won the chemistry prize twice - he should only be counted once. 
+
+SQL:
+
+SELECT subject, COUNT(DISTINCT winner)
+FROM nobel
+GROUP BY subject;
+
+Answer:
+
+subject      COUNT(DISTINCT winner)
+------------------------------------
+chemistry    192
+literature   120
+medicine     227
+peace        138
+physics      224
+
+8. For each subject show how many years have had prizes awarded.
+
+SQL:
+
+SELECT subject, COUNT(DISTINCT yr)
+FROM nobel
+GROUP BY subject;
+
+Answer:
+
+subject      COUNT(DISTINCT yr)
+--------------------------------
+chemistry    115
+literature   116
+medicine     114
+peace        104
+physics      117
+
+9. Show the years in which three prizes were given for Physics.
+
+SQL:
+
+SELECT yr
+FROM nobel
+WHERE subject = 'Physics'
+GROUP BY yr
+HAVING COUNT(*) = 3;
+
+Answer:
+
+yr
+----
+1903
+1956
+1958
+1963
+1964
+1965
+1972
+1973
+...
+
+10. Show winners who have won more than once.
+
+SQL:
+
+SELECT winner
+FROM nobel
+GROUP BY winner
+HAVING COUNT(*) > 1;
+
+Answer:
+
+winner
+------------------------------------------------------------
+Frederick Sanger
+George Smith
+International Committee of the Red Cross
+John Bardeen
+K. Barry Sharpless
+Linus Pauling
+Marie Curie
+Office of the United Nations High Commissioner for Refugees
+
+11. Show winners who have won more than one subject.
+
+SQL:
+
+SELECT winner
+FROM nobel
+GROUP BY winner
+HAVING COUNT(DISTINCT subject) > 1;
+
+Answer:
+
+winner
+--------------
+George Smith
+Linus Pauling
+Marie Curie
+
+12. Show the year and subject where 3 prizes were given. Show only years 2000 onwards.
+
+SQL:
+
+SELECT yr, subject
+FROM nobel
+WHERE yr >= 2000
+GROUP BY yr, subject
+HAVING COUNT(*) = 3;
+
+Answer:
+
+yr    subject
+----------------
+2000  chemistry
+2000  medicine
+2000  physics
+2001  chemistry
+2001  medicine
+2001  physics
+...
