@@ -1,0 +1,44 @@
+#khanacademy
+
+Project: Design a store database
+
+Create your own store! Your store should sell one type of things,
+like clothing or bikes, whatever you want your store to specialize
+in. You should have a table for all the items in your store, and
+at least 5 columns for the kind of data you think you'd need to store.
+You should sell at least 15 items, and use select statements to order
+your items by price and show at least one statistic about the items.
+
+SQL:
+
+CREATE TABLE laptops (
+  id INTEGER PRIMARY KEY,
+  brand TEXT,
+  model TEXT,
+  price INTEGER,
+  ram INTEGER,
+  storage INTEGER
+);
+
+INSERT INTO laptops VALUES (1, 'Apple', 'MacBook Air M2', 1199, 8, 256);
+INSERT INTO laptops VALUES (2, 'Apple', 'MacBook Pro M3', 1999, 16, 512);
+INSERT INTO laptops VALUES (3, 'Dell', 'XPS 13', 1299, 16, 512);
+INSERT INTO laptops VALUES (4, 'Dell', 'Inspiron 15', 799, 8, 512);
+INSERT INTO laptops VALUES (5, 'Lenovo', 'ThinkPad X1', 1499, 16, 1024);
+INSERT INTO laptops VALUES (6, 'Lenovo', 'IdeaPad 5', 699, 8, 512);
+INSERT INTO laptops VALUES (7, 'HP', 'Spectre x360', 1399, 16, 1024);
+INSERT INTO laptops VALUES (8, 'HP', 'Pavilion 15', 749, 8, 512);
+INSERT INTO laptops VALUES (9, 'ASUS', 'ZenBook 14', 999, 16, 512);
+INSERT INTO laptops VALUES (10, 'ASUS', 'Vivobook 15', 649, 8, 512);
+INSERT INTO laptops VALUES (11, 'Acer', 'Swift 3', 699, 8, 512);
+INSERT INTO laptops VALUES (12, 'Acer', 'Aspire 5', 599, 8, 256);
+INSERT INTO laptops VALUES (13, 'MSI', 'Stealth 14', 1799, 32, 1024);
+INSERT INTO laptops VALUES (14, 'Samsung', 'Galaxy Book4', 1099, 16, 512);
+INSERT INTO laptops VALUES (15, 'Microsoft', 'Surface Laptop 7', 1599, 16, 512);
+
+-- Order by price (lowest first)
+SELECT * FROM laptops
+ORDER BY price;
+
+-- Statistic
+SELECT AVG(price) FROM laptops;
